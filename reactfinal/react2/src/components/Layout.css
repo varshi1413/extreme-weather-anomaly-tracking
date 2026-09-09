@@ -1,0 +1,468 @@
+/* ============ FULLSCREEN MAP LAYOUT ============ */
+
+.app-fullscreen {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: block;
+}
+
+.map-fullscreen-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 54px; /* reserves room for the floating footer so the Timeline never sits under it */
+  z-index: 1;
+}
+
+.map-fullscreen-wrap .map-panel {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.map-fullscreen-wrap .map-head {
+  display: none;
+}
+
+.map-fullscreen-wrap .map-stage {
+  margin: 0;
+  border-radius: 0;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ============ FLOATING TOPBAR ============ */
+
+.floating-topbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.floating-topbar .topbar {
+  pointer-events: auto;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  height: auto;
+  min-height: 56px;
+  background: rgba(8, 13, 20, 0.85);
+  backdrop-filter: blur(10px);
+}
+
+/* ============ FLOATING FOOTER ============ */
+
+.floating-footer {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.floating-footer .statusbar {
+  pointer-events: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(6, 10, 16, 0.85);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ============ FLOATING POPUP PANELS ============ */
+
+.floating-panel {
+  position: absolute;
+  z-index: 25;
+  max-height: calc(100vh - 160px);
+  width: 300px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.floating-panel .panel {
+  height: 100%;
+  max-height: calc(100vh - 160px);
+  border-radius: 12px;
+}
+
+.panel-threats {
+  top: 84px;
+  left: 12px;
+}
+
+.panel-detail {
+  top: 84px;
+  right: 210px; /* clears the layer rail */
+  width: 320px;
+}
+
+.panel-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.panel-close-btn:hover {
+  color: var(--red);
+  background: rgba(255, 59, 92, 0.08);
+}
+
+/* ============ REOPEN CHIPS ============ */
+
+.reopen-btn {
+  position: absolute;
+  z-index: 24;
+  top: 84px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(8, 13, 20, 0.85);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+.reopen-btn:hover {
+  color: var(--cyan);
+  border-color: var(--cyan-dim);
+}
+
+.reopen-threats {
+  left: 12px;
+}
+
+.reopen-detail {
+  right: 210px;
+}
+
+/* ============ LAYER MENU (Windy-style right rail) ============ */
+
+.layer-menu {
+  position: absolute;
+  top: 84px;
+  right: 12px;
+  z-index: 26;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.layer-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(8, 13, 20, 0.85);
+  color: var(--text-dim);
+  font-size: 10px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.layer-menu-btn:hover {
+  color: var(--text);
+  border-color: rgba(79, 209, 232, 0.35);
+}
+
+.layer-menu-btn.active {
+  background: linear-gradient(
+    135deg,
+    rgba(79, 209, 232, 0.28),
+    rgba(79, 209, 232, 0.12)
+  );
+  color: #eafeff;
+  border-color: var(--cyan);
+}
+
+.layer-menu-icon {
+  font-size: 14px;
+}
+
+.layer-menu-divider {
+  height: 1px;
+  background: var(--border-soft);
+  margin: 4px 4px;
+}
+
+.layer-menu-res {
+  align-self: stretch;
+}
+
+.historical-rail {
+  position: absolute;
+  top: 432px;
+  right: 18px;
+  z-index: 26;
+}
+
+/* Weather-map chrome inspired by compact forecast clients. */
+.floating-topbar {
+  top: 14px;
+  left: 18px;
+  right: 18px;
+}
+
+.floating-topbar .topbar {
+  min-height: 58px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 5px 22px rgba(12, 28, 45, 0.24);
+  color: #1d2d3d;
+}
+
+.floating-topbar .topbar::before {
+  display: none;
+}
+
+.weather-search {
+  display: flex;
+  align-items: center;
+  width: 280px;
+  height: 40px;
+  gap: 8px;
+  padding: 0 8px 0 12px;
+  border: 1px solid rgba(62, 82, 100, 0.16);
+  border-radius: 22px;
+  background: #fff;
+  color: #7a8791;
+  box-shadow: 0 2px 8px rgba(20, 38, 52, 0.1);
+}
+
+.weather-search > span {
+  font: 26px/1 var(--font-main);
+  transform: rotate(-20deg);
+}
+
+.weather-search input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #273746;
+  font-size: 14px;
+}
+
+.weather-search input::placeholder {
+  color: #87939d;
+}
+
+.weather-search button,
+.menu-button,
+.premium-chip {
+  border: 0;
+  cursor: pointer;
+}
+
+.weather-search button {
+  width: 29px;
+  height: 29px;
+  border: 2px solid #9ba8b1;
+  border-radius: 50%;
+  background: #fff;
+  color: #768590;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.floating-topbar .brand {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 8px;
+}
+
+.floating-topbar .brand-mark {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #bb172b;
+  display: grid;
+  place-items: center;
+}
+
+.floating-topbar .brand-mark svg {
+  width: 24px;
+}
+
+.floating-topbar .brand-name {
+  color: #263746;
+  font-size: 22px;
+  letter-spacing: -0.4px;
+}
+
+.floating-topbar .brand-name small {
+  color: #bb172b;
+  font-size: 10px;
+  letter-spacing: 0;
+}
+
+.floating-topbar .brand-sub,
+.floating-topbar .clock {
+  display: none;
+}
+
+.floating-topbar .topbar-status {
+  margin-left: auto;
+  gap: 8px;
+}
+
+.premium-chip {
+  padding: 9px 14px;
+  border-radius: 18px;
+  background: #f1a900;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.menu-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #078eae;
+  color: #fff;
+  font-size: 20px;
+}
+
+.layer-menu {
+  top: 84px;
+  right: 18px;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.layer-menu-btn {
+  min-width: 122px;
+  padding: 4px 8px 4px 6px;
+  border: 0;
+  border-radius: 16px;
+  background: rgba(27, 39, 51, 0.67);
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.layer-menu-btn.active {
+  background: rgba(27, 39, 51, 0.82);
+  color: #fff;
+  border: 0;
+  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.22);
+}
+
+.layer-menu-swatch {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 16px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.layer-hot { background: linear-gradient(135deg, #19a6d0, #ffd634 54%, #ed3c21); }
+.layer-cold { background: linear-gradient(135deg, #dff6ff, #4697ed 55%, #2439a0); }
+.layer-cyclone { background: conic-gradient(#f04444, #ffc53d, #1aa6c4, #f04444); }
+.layer-wind { background: linear-gradient(135deg, #28344f, #42b9d0 55%, #e7ef9b); }
+.layer-pressure { background: linear-gradient(135deg, #3e5ab4, #e6e26c 55%, #e45b3d); }
+.layer-satellite { background: linear-gradient(135deg, #c8d5d8, #6e8d8c 55%, #263f35); }
+
+.layer-menu-divider { display: none; }
+
+.layer-menu-res {
+  margin-top: 8px;
+  border: 0;
+  border-radius: 16px;
+  background: rgba(27, 39, 51, 0.78);
+}
+
+.layer-menu-res .seg-btn {
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 10px;
+}
+
+.layer-menu-res .seg-btn.active {
+  background: #f2a900;
+  color: #fff;
+  box-shadow: none;
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 850px) {
+  .weather-search {
+    width: 42px;
+    padding: 0 8px;
+  }
+
+  .weather-search input,
+  .weather-search button,
+  .premium-chip {
+    display: none;
+  }
+
+  .floating-topbar .brand-name {
+    font-size: 16px;
+  }
+
+  .floating-topbar .brand-mark {
+    width: 29px;
+    height: 29px;
+  }
+
+  .panel-threats,
+  .panel-detail {
+    width: calc(100vw - 24px);
+    left: 12px;
+    right: 12px;
+  }
+
+  .layer-menu {
+    flex-direction: row;
+    top: auto;
+    bottom: 70px;
+    left: 12px;
+    right: 12px;
+    overflow-x: auto;
+  }
+
+  .historical-rail {
+    top: auto;
+    right: 12px;
+    bottom: 122px;
+  }
+
+  .layer-menu-label {
+    display: none;
+  }
+}

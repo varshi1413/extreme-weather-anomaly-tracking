@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: extreme-weather-intelligence
+Version: 0.1.0
+Summary: Spherical EFI anomaly tracking and conditional diffusion downscaling for the Indian boundary region
+Requires-Python: >=3.10
+Requires-Dist: numpy>=1.24
+Requires-Dist: torch>=2.1
+Requires-Dist: xarray>=2023.1
+Provides-Extra: netcdf
+Requires-Dist: netcdf4>=1.6; extra == "netcdf"
+Provides-Extra: test
+Requires-Dist: pytest>=7.4; extra == "test"

@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Node / React
+node_modules/
+dist/
+.vite/
+
+# Large weather datasets
+*.nc
+*.nc4
+*.grib
+*.grib2
+
+# Model checkpoints
+*.pt
+*.pth
+*.ckpt
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs / temporary files
+*.log
+*.tmp

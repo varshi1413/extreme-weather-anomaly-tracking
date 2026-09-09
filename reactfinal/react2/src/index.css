@@ -1,0 +1,28 @@
+/* =========================================================
+   BASE RESET
+   (Vite's default template styles removed —
+   VAYUNETRA's real theme lives in App.css)
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}

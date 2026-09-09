@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "extreme-weather-intelligence"
+version = "0.1.0"
+description = "Spherical EFI anomaly tracking and conditional diffusion downscaling for the Indian boundary region"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "torch>=2.1",
+  "xarray>=2023.1",
+]
+
+[project.optional-dependencies]
+netcdf = ["netcdf4>=1.6"]
+test = ["pytest>=7.4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
