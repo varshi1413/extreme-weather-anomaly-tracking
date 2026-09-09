@@ -12,14 +12,12 @@ PROJECT_ROOT = os.path.abspath(
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-# Exact preprocessing functions used by training
-from Heatwave_GNN_Training_fixed import (
+from Heatwave_GNN_Training import (
     Config,
     resolve_nc_files,
     open_era5,
     build_mesh_arrays,
 )
-
 from src.extreme_weather.heatwave_inference import HeatwavePredictor
 from src.extreme_weather.heatwave_tracker import HeatwaveTracker
 
@@ -33,7 +31,7 @@ ERA5_PATH = r"C:\Users\Varshitha S B\Documents\ERA5_DOWNLOAD\ERA5_INDIA"
 CHECKPOINT_PATH = os.path.join(
     PROJECT_ROOT,
     "checkpoints",
-    "heatwave_schema_test.pt",
+    "heatwave_final.pt",
 )
 
 
@@ -204,11 +202,30 @@ def main():
             f"Need at least {predictor.window} ERA5 days."
         )
 
-    # For integration testing use latest available 5 days
-    x = features[-predictor.window:]
+    # --------------------------------------------------------
+    # Use a summer window for heatwave demonstration
+    # Input: 2015-05-20 to 2015-05-24
+    # Model predicts the following 5-day horizon
+    # --------------------------------------------------------
 
-    dates = daily.time.values[-predictor.window:]
+    target_start = np.datetime64("2015-05-20")
+    target_end   = np.datetime64("2015-05-24")
 
+    time_values = daily.time.values.astype("datetime64[D]")
+
+    selected_indices = np.where(
+        (time_values >= target_start) &
+        (time_values <= target_end)
+    )[0]
+
+    if len(selected_indices) != predictor.window:
+        raise ValueError(
+            f"Expected {predictor.window} days, "
+            f"but found {len(selected_indices)}."
+        )
+
+    x = features[selected_indices]
+    dates = daily.time.values[selected_indices]
     print("\nInput ERA5 dates:")
 
     for d in dates:
@@ -342,6 +359,29 @@ def main():
                         4
                     )
                 )
+    # --------------------------------------------------------
+    # 12. Save tracking result for dashboard
+    # --------------------------------------------------------
+
+    import json
+
+    output_dir = os.path.join(PROJECT_ROOT, "outputs")
+    os.makedirs(output_dir, exist_ok=True)
+
+    output_file = os.path.join(
+        output_dir,
+        "heatwave_tracks.json"
+    )
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(
+            tracking,
+            f,
+            indent=2
+        )
+
+    print("\nHeatwave tracks saved to:")
+    print(output_file)
 
     print("\n==========================================")
     print(" REAL ERA5 PIPELINE COMPLETED")

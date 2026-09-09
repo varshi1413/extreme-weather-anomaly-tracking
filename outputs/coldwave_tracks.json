@@ -1,0 +1,443 @@
+{
+  "mode": "model",
+  "model": "ColdwaveGNN",
+  "region": "India",
+  "forecastDays": 5,
+  "count": 4,
+  "anomalies": [
+    {
+      "id": "CW001",
+      "name": "Cold Wave CW001",
+      "type": "Cold Wave",
+      "probability": 0.9304285645484924,
+      "confidence": 0.9304285645484924,
+      "efi": 0.9304285645484924,
+      "sev": "Severe",
+      "severity": "Severe",
+      "lat": 15.240159034729004,
+      "lon": 80.3062744140625,
+      "startDay": 1,
+      "endDay": 5,
+      "durationDays": 5,
+      "track": [
+        {
+          "day": 1,
+          "lat": 15.240160942077637,
+          "lon": 80.3062744140625,
+          "probability": 0.9495643377304077
+        },
+        {
+          "day": 2,
+          "lat": 15.240159034729004,
+          "lon": 80.3062744140625,
+          "probability": 0.9476635456085205
+        },
+        {
+          "day": 3,
+          "lat": 15.240157127380371,
+          "lon": 80.3062744140625,
+          "probability": 0.9129052758216858
+        },
+        {
+          "day": 4,
+          "lat": 15.240159034729004,
+          "lon": 80.3062744140625,
+          "probability": 0.9228819012641907
+        },
+        {
+          "day": 5,
+          "lat": 15.240159034729004,
+          "lon": 80.3062744140625,
+          "probability": 0.9191277623176575
+        }
+      ],
+      "boundingBox": {
+        "lat_min": 15.240160942077637,
+        "lat_max": 15.240160942077637,
+        "lon_min": 80.3062744140625,
+        "lon_max": 80.3062744140625
+      },
+      "footprints": [
+        {
+          "day": 1,
+          "nodes": [
+            56
+          ],
+          "centroid": {
+            "lat": 15.240160942077637,
+            "lon": 80.3062744140625
+          },
+          "bbox": {
+            "lat_min": 15.240160942077637,
+            "lat_max": 15.240160942077637,
+            "lon_min": 80.3062744140625,
+            "lon_max": 80.3062744140625
+          },
+          "mean_probability": 0.9495643377304077,
+          "max_probability": 0.9495643377304077,
+          "node_count": 1
+        },
+        {
+          "day": 2,
+          "nodes": [
+            56
+          ],
+          "centroid": {
+            "lat": 15.240159034729004,
+            "lon": 80.3062744140625
+          },
+          "bbox": {
+            "lat_min": 15.240160942077637,
+            "lat_max": 15.240160942077637,
+            "lon_min": 80.3062744140625,
+            "lon_max": 80.3062744140625
+          },
+          "mean_probability": 0.9476635456085205,
+          "max_probability": 0.9476635456085205,
+          "node_count": 1
+        },
+        {
+          "day": 3,
+          "nodes": [
+            56
+          ],
+          "centroid": {
+            "lat": 15.240157127380371,
+            "lon": 80.3062744140625
+          },
+          "bbox": {
+            "lat_min": 15.240160942077637,
+            "lat_max": 15.240160942077637,
+            "lon_min": 80.3062744140625,
+            "lon_max": 80.3062744140625
+          },
+          "mean_probability": 0.9129052758216858,
+          "max_probability": 0.9129052758216858,
+          "node_count": 1
+        },
+        {
+          "day": 4,
+          "nodes": [
+            56
+          ],
+          "centroid": {
+            "lat": 15.240159034729004,
+            "lon": 80.3062744140625
+          },
+          "bbox": {
+            "lat_min": 15.240160942077637,
+            "lat_max": 15.240160942077637,
+            "lon_min": 80.3062744140625,
+            "lon_max": 80.3062744140625
+          },
+          "mean_probability": 0.9228819012641907,
+          "max_probability": 0.9228819012641907,
+          "node_count": 1
+        },
+        {
+          "day": 5,
+          "nodes": [
+            56
+          ],
+          "centroid": {
+            "lat": 15.240159034729004,
+            "lon": 80.3062744140625
+          },
+          "bbox": {
+            "lat_min": 15.240160942077637,
+            "lat_max": 15.240160942077637,
+            "lon_min": 80.3062744140625,
+            "lon_max": 80.3062744140625
+          },
+          "mean_probability": 0.9191277623176575,
+          "max_probability": 0.9191277623176575,
+          "node_count": 1
+        }
+      ],
+      "source": "ColdwaveGNN",
+      "isModelOutput": true
+    },
+    {
+      "id": "CW002",
+      "name": "Cold Wave CW002",
+      "type": "Cold Wave",
+      "probability": 0.6082717478275299,
+      "confidence": 0.6082717478275299,
+      "efi": 0.6082717478275299,
+      "sev": "Moderate",
+      "severity": "Moderate",
+      "lat": 31.282520294189453,
+      "lon": 79.45274353027344,
+      "startDay": 1,
+      "endDay": 2,
+      "durationDays": 2,
+      "track": [
+        {
+          "day": 1,
+          "lat": 31.28252410888672,
+          "lon": 79.45274353027344,
+          "probability": 0.6786860823631287
+        },
+        {
+          "day": 2,
+          "lat": 31.282520294189453,
+          "lon": 79.45274353027344,
+          "probability": 0.5378574132919312
+        }
+      ],
+      "boundingBox": {
+        "lat_min": 31.28252410888672,
+        "lat_max": 31.28252410888672,
+        "lon_min": 79.45275115966797,
+        "lon_max": 79.45275115966797
+      },
+      "footprints": [
+        {
+          "day": 1,
+          "nodes": [
+            201
+          ],
+          "centroid": {
+            "lat": 31.28252410888672,
+            "lon": 79.45274353027344
+          },
+          "bbox": {
+            "lat_min": 31.28252410888672,
+            "lat_max": 31.28252410888672,
+            "lon_min": 79.45275115966797,
+            "lon_max": 79.45275115966797
+          },
+          "mean_probability": 0.6786860823631287,
+          "max_probability": 0.6786860823631287,
+          "node_count": 1
+        },
+        {
+          "day": 2,
+          "nodes": [
+            201
+          ],
+          "centroid": {
+            "lat": 31.282520294189453,
+            "lon": 79.45274353027344
+          },
+          "bbox": {
+            "lat_min": 31.28252410888672,
+            "lat_max": 31.28252410888672,
+            "lon_min": 79.45275115966797,
+            "lon_max": 79.45275115966797
+          },
+          "mean_probability": 0.5378574132919312,
+          "max_probability": 0.5378574132919312,
+          "node_count": 1
+        }
+      ],
+      "source": "ColdwaveGNN",
+      "isModelOutput": true
+    },
+    {
+      "id": "CW003",
+      "name": "Cold Wave CW003",
+      "type": "Cold Wave",
+      "probability": 0.7581115663051605,
+      "confidence": 0.7581115663051605,
+      "efi": 0.7581115663051605,
+      "sev": "Moderate",
+      "severity": "Moderate",
+      "lat": 23.553613662719727,
+      "lon": 95.15241241455078,
+      "startDay": 2,
+      "endDay": 5,
+      "durationDays": 4,
+      "track": [
+        {
+          "day": 2,
+          "lat": 23.55361557006836,
+          "lon": 95.15241241455078,
+          "probability": 0.6029104590415955
+        },
+        {
+          "day": 3,
+          "lat": 23.55361557006836,
+          "lon": 95.15241241455078,
+          "probability": 0.7350232601165771
+        },
+        {
+          "day": 4,
+          "lat": 23.553613662719727,
+          "lon": 95.15241241455078,
+          "probability": 0.8498023748397827
+        },
+        {
+          "day": 5,
+          "lat": 23.553613662719727,
+          "lon": 95.15241241455078,
+          "probability": 0.8447101712226868
+        }
+      ],
+      "boundingBox": {
+        "lat_min": 23.553617477416992,
+        "lat_max": 23.553617477416992,
+        "lon_min": 95.15242004394531,
+        "lon_max": 95.15242004394531
+      },
+      "footprints": [
+        {
+          "day": 2,
+          "nodes": [
+            215
+          ],
+          "centroid": {
+            "lat": 23.55361557006836,
+            "lon": 95.15241241455078
+          },
+          "bbox": {
+            "lat_min": 23.553617477416992,
+            "lat_max": 23.553617477416992,
+            "lon_min": 95.15242004394531,
+            "lon_max": 95.15242004394531
+          },
+          "mean_probability": 0.6029104590415955,
+          "max_probability": 0.6029104590415955,
+          "node_count": 1
+        },
+        {
+          "day": 3,
+          "nodes": [
+            215
+          ],
+          "centroid": {
+            "lat": 23.55361557006836,
+            "lon": 95.15241241455078
+          },
+          "bbox": {
+            "lat_min": 23.553617477416992,
+            "lat_max": 23.553617477416992,
+            "lon_min": 95.15242004394531,
+            "lon_max": 95.15242004394531
+          },
+          "mean_probability": 0.7350232601165771,
+          "max_probability": 0.7350232601165771,
+          "node_count": 1
+        },
+        {
+          "day": 4,
+          "nodes": [
+            215
+          ],
+          "centroid": {
+            "lat": 23.553613662719727,
+            "lon": 95.15241241455078
+          },
+          "bbox": {
+            "lat_min": 23.553617477416992,
+            "lat_max": 23.553617477416992,
+            "lon_min": 95.15242004394531,
+            "lon_max": 95.15242004394531
+          },
+          "mean_probability": 0.8498023748397827,
+          "max_probability": 0.8498023748397827,
+          "node_count": 1
+        },
+        {
+          "day": 5,
+          "nodes": [
+            215
+          ],
+          "centroid": {
+            "lat": 23.553613662719727,
+            "lon": 95.15241241455078
+          },
+          "bbox": {
+            "lat_min": 23.553617477416992,
+            "lat_max": 23.553617477416992,
+            "lon_min": 95.15242004394531,
+            "lon_max": 95.15242004394531
+          },
+          "mean_probability": 0.8447101712226868,
+          "max_probability": 0.8447101712226868,
+          "node_count": 1
+        }
+      ],
+      "source": "ColdwaveGNN",
+      "isModelOutput": true
+    },
+    {
+      "id": "CW004",
+      "name": "Cold Wave CW004",
+      "type": "Cold Wave",
+      "probability": 0.5226191282272339,
+      "confidence": 0.5226191282272339,
+      "efi": 0.5226191282272339,
+      "sev": "Low",
+      "severity": "Low",
+      "lat": 30.70330047607422,
+      "lon": 73.91346740722656,
+      "startDay": 4,
+      "endDay": 5,
+      "durationDays": 2,
+      "track": [
+        {
+          "day": 4,
+          "lat": 30.0,
+          "lon": 69.09484100341797,
+          "probability": 0.5025874376296997
+        },
+        {
+          "day": 5,
+          "lat": 30.70330047607422,
+          "lon": 73.91346740722656,
+          "probability": 0.5426508188247681
+        }
+      ],
+      "boundingBox": {
+        "lat_min": 30.0,
+        "lat_max": 31.28252410888672,
+        "lon_min": 69.09484100341797,
+        "lon_max": 79.45275115966797
+      },
+      "footprints": [
+        {
+          "day": 4,
+          "nodes": [
+            15
+          ],
+          "centroid": {
+            "lat": 30.0,
+            "lon": 69.09484100341797
+          },
+          "bbox": {
+            "lat_min": 30.0,
+            "lat_max": 30.0,
+            "lon_min": 69.09484100341797,
+            "lon_max": 69.09484100341797
+          },
+          "mean_probability": 0.5025874376296997,
+          "max_probability": 0.5025874376296997,
+          "node_count": 1
+        },
+        {
+          "day": 5,
+          "nodes": [
+            201,
+            15
+          ],
+          "centroid": {
+            "lat": 30.70330047607422,
+            "lon": 73.91346740722656
+          },
+          "bbox": {
+            "lat_min": 30.0,
+            "lat_max": 31.28252410888672,
+            "lon_min": 69.09484100341797,
+            "lon_max": 79.45275115966797
+          },
+          "mean_probability": 0.5426508188247681,
+          "max_probability": 0.5767210125923157,
+          "node_count": 2
+        }
+      ],
+      "source": "ColdwaveGNN",
+      "isModelOutput": true
+    }
+  ]
+}

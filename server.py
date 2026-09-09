@@ -1,6 +1,7 @@
 from __future__ import annotations
 from src.extreme_weather.heatwave_inference import HeatwavePredictor
 from src.extreme_weather.stage2_inference import Stage2DiffusionInference
+from src.extreme_weather.stage2_inference import Stage2DiffusionInference
 
 import json
 import os
@@ -38,14 +39,33 @@ _historical_cache: dict[str, list[dict]] | None = None
 PROJECT_ROOT = Path(__file__).resolve().parent
 
 HEATWAVE_CHECKPOINT = (
-    PROJECT_ROOT / "checkpoints" / "heatwave_schema_test.pt"
+    PROJECT_ROOT / "checkpoints" / "heatwave_final.pt"
 )
 
 DIFFUSION_CHECKPOINT = (
     PROJECT_ROOT / "checkpoints" / "stage2_era5_256.pt"
 )
 
+COLDWAVE_TRACKS_FILE = (
+    PROJECT_ROOT / "outputs" / "coldwave_tracks.json"
+)
 
+HEATWAVE_TRACKS_FILE = (
+    PROJECT_ROOT / "outputs" / "heatwave_tracks.json"
+)
+
+_stage2_model = None
+
+
+def get_stage2_model():
+    global _stage2_model
+
+    if _stage2_model is None:
+        _stage2_model = Stage2DiffusionInference(
+            checkpoint_path=str(DIFFUSION_CHECKPOINT)
+        )
+
+    return _stage2_model
 
 def historical_events() -> dict[str, list[dict]]:
     global _historical_cache
@@ -154,7 +174,123 @@ def demo_response() -> dict:
         })
     return {"anomalies": anomalies, "model": {"stage": "stage-1", "nodes": mesh.num_nodes, "peak_signal": round(peak, 3)}, "tracker": result}
 
+def real_anomaly_response() -> dict:
 
+    anomalies = []
+    sources = []
+
+    # ========================================================
+    # COLDWAVE
+    # ========================================================
+
+    if COLDWAVE_TRACKS_FILE.exists():
+
+        with COLDWAVE_TRACKS_FILE.open(
+            "r",
+            encoding="utf-8"
+        ) as file:
+            cold_payload = json.load(file)
+
+        cold_anomalies = cold_payload.get("anomalies", [])
+
+        anomalies.extend(cold_anomalies)
+
+        if cold_anomalies:
+            sources.append("ColdwaveGNN")
+
+    # ========================================================
+    # HEATWAVE
+    # ========================================================
+
+    if HEATWAVE_TRACKS_FILE.exists():
+
+        with HEATWAVE_TRACKS_FILE.open(
+            "r",
+            encoding="utf-8"
+        ) as file:
+            heat_payload = json.load(file)
+
+        # heatwave_tracks.json contains tracker tracks
+        heat_tracks = heat_payload.get("tracks", [])
+
+        for track in heat_tracks:
+
+            trajectory = track.get("trajectory", [])
+
+            if not trajectory:
+                continue
+
+            first = trajectory[0]
+
+            anomalies.append({
+                "id": track.get("event_id", "HW"),
+                "name": "Heat Wave " + track.get("event_id", "HW"),
+                "type": "Heat Wave",
+
+                "lat": first.get("lat"),
+                "lon": first.get("lon"),
+
+                "probability": track.get("confidence", 0),
+                "confidence": track.get("confidence", 0),
+
+                # frontend compatibility only - not formal EFI
+                "efi": track.get("confidence", 0),
+
+                "sev": (
+                    "Severe"
+                    if track.get("confidence", 0) >= 0.85
+                    else "Moderate"
+                    if track.get("confidence", 0) >= 0.65
+                    else "Low"
+                ),
+
+                "severity": (
+                    "Severe"
+                    if track.get("confidence", 0) >= 0.85
+                    else "Moderate"
+                    if track.get("confidence", 0) >= 0.65
+                    else "Low"
+                ),
+
+                "startDay": track.get("start_day", 1),
+                "endDay": track.get("end_day", len(trajectory)),
+                "durationDays": track.get(
+                    "duration_days",
+                    len(trajectory)
+                ),
+
+                "track": trajectory,
+
+                "boundingBox": track.get(
+                    "bounding_box",
+                    {}
+                ),
+
+                "source": "HeatwaveGNN",
+                "isModelOutput": True
+            })
+        if heat_tracks:
+            sources.append("HeatwaveGNN")
+
+    # ========================================================
+    # RESPONSE
+    # ========================================================
+
+    return {
+        "anomalies": anomalies,
+
+        "model": {
+            "stage": "stage-1",
+            "source": " + ".join(sources)
+                      if sources
+                      else "No model output",
+
+            "mode": "model",
+            "region": "India ERA5 domain",
+            "forecastDays": 5,
+            "count": len(anomalies)
+        }
+    }
 def fetch_json(url: str, method: str = "GET", payload: dict | None = None, headers: dict | None = None) -> dict:
     body = None if payload is None else json.dumps(payload).encode("utf-8")
     request_headers = {"Accept": "application/json", "User-Agent": "vayunetra/0.1"}
@@ -236,7 +372,54 @@ def model_status():
                 "waiting for training climatology and std.nc",
         },
     }
+    
+def run_diffusion_demo(payload: dict) -> dict:
+    model = get_stage2_model()
 
+    coarse = np.asarray(
+        payload["coarse_weather"],
+        dtype=np.float32,
+    )
+
+    mask = np.asarray(
+        payload["anomaly_mask"],
+        dtype=np.float32,
+    )
+
+    ensemble_size = int(
+        payload.get("ensemble_size", 1)
+    )
+
+    output = model.predict(
+        coarse_weather=coarse,
+        anomaly_mask=mask,
+        ensemble_size=ensemble_size,
+    )
+
+    return {
+        "ok": True,
+        "stage": "stage-2",
+        "model": "ConditionalDiffusionDownscaler",
+
+        # IMPORTANT: because exact training normalization
+        # statistics are currently unavailable.
+        "mode": "prototype_demo",
+
+        "variables": model.variables,
+        "scaleFactor": model.scale_factor,
+
+        "inputShape": list(coarse.shape),
+        "outputShape": list(output.shape),
+
+        "normalizationAvailable": False,
+
+        "warning":
+            "Training normalization statistics are unavailable; "
+            "this endpoint demonstrates Stage-2 model execution "
+            "and must not be interpreted as physical downscaled weather.",
+
+        "output": output.tolist(),
+    }
 class ApiHandler(BaseHTTPRequestHandler):
     def _send(self, status: int, payload: dict) -> None:
         body = json.dumps(payload).encode("utf-8")
@@ -263,7 +446,7 @@ class ApiHandler(BaseHTTPRequestHandler):
         elif path == "/api/model-status":
             self._send(200, model_status())
         elif path == "/api/anomalies":
-            self._send(200, demo_response())
+            self._send(200, real_anomaly_response())
         elif path == "/api/historical":
             try:
                 self._send(200, historical_response(query.get("year", [None])[0]))
@@ -285,18 +468,66 @@ class ApiHandler(BaseHTTPRequestHandler):
             self._send(404, {"error": "Not found"})
 
     def do_POST(self) -> None:
-        if urlparse(self.path).path != "/api/predict":
-            self._send(404, {"error": "Not found"})
-            return
-        try:
-            size = int(self.headers.get("Content-Length", "0"))
-            payload = json.loads(self.rfile.read(size))
-            forecast = np.asarray(payload["forecast"], dtype=np.float32)
-            baseline = np.asarray(payload["baseline"], dtype=np.float32)
-            self._send(200, run_tracker(forecast, baseline))
-        except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
-            self._send(400, {"error": str(error)})
+        path = urlparse(self.path).path
 
+        try:
+            size = int(
+                self.headers.get("Content-Length", "0")
+            )
+
+            payload = json.loads(
+                self.rfile.read(size)
+            )
+
+            # -----------------------------------------
+            # STAGE 1
+            # -----------------------------------------
+
+            if path == "/api/predict":
+                forecast = np.asarray(
+                    payload["forecast"],
+                    dtype=np.float32,
+                )
+
+                baseline = np.asarray(
+                    payload["baseline"],
+                    dtype=np.float32,
+                )
+
+                self._send(
+                    200,
+                    run_tracker(forecast, baseline),
+                )
+                return
+
+            # -----------------------------------------
+            # STAGE 2
+            # -----------------------------------------
+
+            if path == "/api/downscale":
+                self._send(
+                    200,
+                    run_diffusion_demo(payload),
+                )
+                return
+
+            self._send(
+                404,
+                {"error": "Not found"},
+            )
+
+        except (
+            KeyError,
+            TypeError,
+            ValueError,
+            RuntimeError,
+            json.JSONDecodeError,
+        ) as error:
+
+            self._send(
+                400,
+                {"error": str(error)},
+            )
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))

@@ -162,39 +162,73 @@ function WeatherMap({
 
     return value;
   }
+  function getTrackPoints(anomaly) {
+    if (!anomaly?.track?.length) return [];
 
+    return anomaly.track
+      .map((point) => {
+        // New GNN tracker output:
+        // { day, lat, lon, probability }
+        if (point && typeof point === "object" && !Array.isArray(point)) {
+          const lat = Number(point.lat);
+          const lon = Number(point.lon);
+
+          if (Number.isFinite(lat) && Number.isFinite(lon)) {
+            return [lat, lon];
+          }
+
+          return null;
+        }
+
+        // Old frontend/demo format:
+        // [lat, lon]
+        if (Array.isArray(point) && point.length >= 2) {
+          const lat = Number(point[0]);
+          const lon = Number(point[1]);
+
+          if (Number.isFinite(lat) && Number.isFinite(lon)) {
+            return [lat, lon];
+          }
+        }
+
+        return null;
+      })
+      .filter(Boolean);
+  }
   // --------------------------------------------------
   // CYCLONE POSITION
   // --------------------------------------------------
 
   function interpolateCentroid(anomaly, hour) {
-    if (!anomaly?.track?.length) {
-      return [anomaly.lat, anomaly.lon];
+    const track = getTrackPoints(anomaly);
+
+    if (!track.length) {
+      return [Number(anomaly.lat), Number(anomaly.lon)];
+    }
+
+    if (track.length === 1) {
+      return track[0];
     }
 
     const progress = Math.min(1, Math.max(0, hour / 168));
 
-    const trackLength = anomaly.track.length - 1;
-
+    const trackLength = track.length - 1;
     const position = progress * trackLength;
 
     const index0 = Math.floor(position);
-
     const index1 = Math.min(trackLength, index0 + 1);
-
     const fraction = position - index0;
 
     const lat =
-      anomaly.track[index0][0] +
-      (anomaly.track[index1][0] - anomaly.track[index0][0]) * fraction;
+      track[index0][0] +
+      (track[index1][0] - track[index0][0]) * fraction;
 
     const lon =
-      anomaly.track[index0][1] +
-      (anomaly.track[index1][1] - anomaly.track[index0][1]) * fraction;
+      track[index0][1] +
+      (track[index1][1] - track[index0][1]) * fraction;
 
     return [lat, lon];
   }
-
   // --------------------------------------------------
   // HEAT FIELD
   // --------------------------------------------------
@@ -349,7 +383,7 @@ function WeatherMap({
       map.removeLayer(trackLineRef.current);
     }
 
-    const track = selected.track || [];
+    const track = getTrackPoints(selected);
 
     if (track.length > 1) {
       const trackLength = track.length - 1;

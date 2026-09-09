@@ -16,9 +16,7 @@ PROJECT_ROOT = os.path.abspath(
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-
-# Architecture already written by your teammate
-from Heatwave_GNN_Training_fixed import (
+from Heatwave_GNN_Training import (
     HeatwaveGNN,
     build_edge_features,
 )

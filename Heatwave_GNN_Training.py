@@ -2296,6 +2296,12 @@ def train_heatwave(cfg):
     print("[5/7] TRAINING")
     print("=" * 70)
 
+    print(
+        f"Starting heatwave training for {cfg.epochs} epochs "
+        f"(batch_size={cfg.batch_size}, device={device})",
+        flush=True,
+    )
+
     for epoch in range(1, cfg.epochs + 1):
 
         train_metrics = run_epoch(
@@ -2343,7 +2349,8 @@ def train_heatwave(cfg):
             f"Val MAE: {val_metrics['mae_c']:.3f} °C | "
             f"Val RMSE: {val_metrics['rmse_c']:.3f} °C | "
             f"Heat F1: {val_metrics['f1']:.3f} | "
-            f"LR: {lr:.2e}"
+            f"LR: {lr:.2e}",
+            flush=True,
         )
 
         if val_metrics["loss"] < best_val:
