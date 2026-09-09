@@ -116,3 +116,100 @@ def sample_ensemble(
         if step > 0:
             result = result + beta.sqrt() * torch.randn_like(result)
     return result.view(samples, batch, channels, height * model.scale_factor, width * model.scale_factor)
+
+@torch.no_grad()
+def sample_ensemble_posterior(
+    model: ConditionalDiffusionDownscaler,
+    schedule: DiffusionSchedule,
+    coarse_condition: torch.Tensor,
+    anomaly_condition: torch.Tensor,
+    samples: int = 1,
+) -> torch.Tensor:
+
+    if samples < 1:
+        raise ValueError("samples must be at least 1")
+
+    model.eval()
+    schedule.to(coarse_condition.device)
+
+    batch, channels, height, width = coarse_condition.shape
+
+    output_shape = (
+        samples * batch,
+        channels,
+        height * model.scale_factor,
+        width * model.scale_factor,
+    )
+
+    coarse = coarse_condition.repeat(samples, 1, 1, 1)
+    anomaly = anomaly_condition.repeat(samples, 1, 1, 1)
+
+    result = torch.randn(
+        output_shape,
+        device=coarse.device,
+        dtype=coarse.dtype,
+    )
+
+    for step in reversed(range(schedule.steps)):
+
+        timestep = torch.full(
+            (result.shape[0],),
+            step,
+            device=result.device,
+            dtype=torch.long,
+        )
+
+        predicted_noise = model(
+            result,
+            coarse,
+            timestep,
+            anomaly,
+        )
+
+        alpha = schedule.alphas[step]
+        alpha_bar = schedule.alpha_bars[step]
+        beta = schedule.betas[step]
+
+        # DDPM reverse mean
+        result = (
+            result
+            - beta
+            / torch.sqrt(1.0 - alpha_bar)
+            * predicted_noise
+        ) / torch.sqrt(alpha)
+
+        if step > 0:
+
+            previous_alpha_bar = schedule.alpha_bars[step - 1]
+
+            # Posterior variance:
+            # beta_tilde =
+            # beta_t * (1-alpha_bar_(t-1))
+            #          / (1-alpha_bar_t)
+
+            posterior_variance = (
+                beta
+                * (1.0 - previous_alpha_bar)
+                / (1.0 - alpha_bar)
+            )
+
+            noise = torch.randn_like(result)
+
+            result = (
+                result
+                + torch.sqrt(
+                    torch.clamp(
+                        posterior_variance,
+                        min=1e-20,
+                    )
+                )
+                * noise
+            )
+
+    return result.view(
+        samples,
+        batch,
+        channels,
+        height * model.scale_factor,
+        width * model.scale_factor,
+    )

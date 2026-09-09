@@ -5,8 +5,8 @@ from .diffusion import (
     ConditionalDiffusionDownscaler,
     DiffusionSchedule,
     sample_ensemble,
+    sample_ensemble_posterior,
 )
-
 
 class Stage2DiffusionInference:
 
